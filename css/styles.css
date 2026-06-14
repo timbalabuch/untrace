@@ -482,6 +482,11 @@ h1 {
 /* ---------- SEO / content section ---------- */
 .seo {
   margin: 3rem 0 0;
+  padding-top: 2.5rem;
+  border-top: 2px solid var(--line);
+}
+.seo > h2:first-child {
+  margin-top: 0;
 }
 .seo-intro {
   font-size: 1.02rem;
