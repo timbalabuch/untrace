@@ -478,3 +478,43 @@ h1 {
 .verify-link {
   color: var(--accent-deep);
 }
+
+/* ---------- SEO / content section ---------- */
+.seo {
+  margin: 3rem 0 0;
+}
+.seo-intro {
+  font-size: 1.02rem;
+  color: var(--ink-soft);
+}
+.seo h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin: 2rem 0 0.6rem;
+}
+.seo details {
+  border-top: 1px solid var(--line);
+  padding: 0.7rem 0;
+}
+.seo summary {
+  cursor: pointer;
+  font-weight: 500;
+  list-style: none;
+}
+.seo summary::-webkit-details-marker {
+  display: none;
+}
+.seo summary::before {
+  content: '+';
+  color: var(--accent);
+  font-weight: 700;
+  margin-right: 0.6rem;
+}
+.seo details[open] summary::before {
+  content: '–';
+}
+.seo details p {
+  margin: 0.6rem 0 0;
+  color: var(--ink-soft);
+}

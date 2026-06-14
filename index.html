@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Untrace — Share photos, not your metadata</title>
+    <title>Untrace — Remove EXIF, GPS &amp; metadata from photos</title>
     <link
       rel="preload"
       href="vendor/fonts/fraunces.woff2"
@@ -12,6 +12,32 @@
       crossorigin
     />
     <link rel="stylesheet" href="css/styles.css" />
+    <meta
+      name="description"
+      content="Free, private, in-browser tool to strip EXIF, GPS, XMP, IPTC and C2PA metadata from JPEG and PNG photos — without losing quality. Your images never leave your device."
+    />
+    <link rel="canonical" href="https://untrace.uxtim.com/" />
+    <meta name="theme-color" content="#246b5e" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Untrace" />
+    <meta property="og:title" content="Untrace — Remove EXIF, GPS &amp; metadata from photos" />
+    <meta
+      property="og:description"
+      content="Free, private, in-browser tool to strip EXIF, GPS, XMP, IPTC and C2PA metadata from JPEG and PNG photos — without losing quality. Your images never leave your device."
+    />
+    <meta property="og:url" content="https://untrace.uxtim.com/" />
+    <meta property="og:image" content="https://untrace.uxtim.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Untrace — Remove EXIF, GPS &amp; metadata from photos" />
+    <meta
+      name="twitter:description"
+      content="Free, private, in-browser tool to strip EXIF, GPS, XMP, IPTC and C2PA metadata from JPEG and PNG photos — without losing quality. Your images never leave your device."
+    />
+    <meta name="twitter:image" content="https://untrace.uxtim.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   </head>
   <body>
     <main>
@@ -36,10 +62,117 @@
         </button>
       </div>
       <ul id="results" class="results"></ul>
+      <section class="seo">
+        <p class="seo-intro">
+          Untrace removes the hidden metadata your photos carry — EXIF, GPS location, device
+          details, timestamps and C2PA markers — right in your browser, with no quality loss and
+          nothing uploaded.
+        </p>
+        <h2>How it works</h2>
+        <p>
+          Drop a JPEG or PNG and Untrace strips the metadata blocks while leaving the pixels
+          byte-for-byte identical, then lets you download the cleaned file (or a batch as a ZIP).
+          All processing happens locally on your device.
+        </p>
+        <h2>Frequently asked questions</h2>
+        <details>
+          <summary>What metadata does Untrace remove?</summary>
+          <p>
+            EXIF, GPS coordinates, camera and device info, timestamps, XMP, IPTC, C2PA and other
+            hidden markers.
+          </p>
+        </details>
+        <details>
+          <summary>Does it reduce image quality?</summary>
+          <p>
+            No. It removes only the metadata blocks; the pixels stay byte-for-byte identical, so the
+            image is unchanged.
+          </p>
+        </details>
+        <details>
+          <summary>Are my photos uploaded anywhere?</summary>
+          <p>No. Everything runs locally in your browser — no image ever leaves your device.</p>
+        </details>
+        <details>
+          <summary>Which formats are supported?</summary>
+          <p>JPEG and PNG.</p>
+        </details>
+        <details>
+          <summary>Why remove metadata before sharing a photo?</summary>
+          <p>
+            Photos can reveal your GPS location, device model and the exact time a shot was taken;
+            stripping that protects your privacy.
+          </p>
+        </details>
+      </section>
     </main>
     <footer class="colophon">
       100% client-side — no image, byte, or pixel ever leaves your machine.
     </footer>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Untrace",
+        "description": "Free, private, in-browser tool to strip EXIF, GPS, XMP, IPTC and C2PA metadata from JPEG and PNG photos — without losing quality. Your images never leave your device.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any",
+        "url": "https://untrace.uxtim.com/",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": [
+          "Removes EXIF, GPS and timestamps",
+          "Strips XMP, IPTC and C2PA",
+          "Lossless — pixels unchanged",
+          "Runs entirely in the browser",
+          "Batch download as ZIP"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What metadata does Untrace remove?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "EXIF, GPS coordinates, camera and device info, timestamps, XMP, IPTC, C2PA and other hidden markers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it reduce image quality?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. It removes only the metadata blocks; the pixels stay byte-for-byte identical, so the image is unchanged."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are my photos uploaded anywhere?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Everything runs locally in your browser — no image ever leaves your device."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which formats are supported?",
+            "acceptedAnswer": { "@type": "Answer", "text": "JPEG and PNG." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why remove metadata before sharing a photo?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Photos can reveal your GPS location, device model and the exact time a shot was taken; stripping that protects your privacy."
+            }
+          }
+        ]
+      }
+    </script>
     <script src="vendor/jszip.min.js"></script>
     <script type="module" src="js/main.js"></script>
   </body>
