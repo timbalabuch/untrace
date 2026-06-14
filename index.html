@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Untrace — Share photos, not your metadata</title>
+    <link
+      rel="preload"
+      href="vendor/fonts/fraunces.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <main>
+      <div class="brand">
+        <h1>Untrace</h1>
+        <p class="tagline">Share photos, not your metadata</p>
+      </div>
+      <p class="mode-desc">
+        Strip EXIF, GPS, XMP, IPTC, C2PA and hidden markers from JPEG and PNG — without altering
+        image quality.
+      </p>
+      <div id="drop" class="drop">
+        <p class="drop-hint">Drop your images here</p>
+        <p class="drop-or"><span>or</span></p>
+        <label class="btn"
+          >Choose files<input id="file" type="file" accept="image/jpeg,image/png" multiple hidden
+        /></label>
+      </div>
+      <div id="actions" class="actions" hidden>
+        <button id="download-all" class="btn btn-ghost">
+          Download all <span class="btn-tag">ZIP</span>
+        </button>
+      </div>
+      <ul id="results" class="results"></ul>
+    </main>
+    <footer class="colophon">
+      100% client-side — no image, byte, or pixel ever leaves your machine.
+    </footer>
+    <script src="vendor/jszip.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
