@@ -25,6 +25,13 @@ function tag(text) {
   return el;
 }
 
+function statusBadge(text) {
+  const el = document.createElement('span');
+  el.className = 'status';
+  el.textContent = text;
+  return el;
+}
+
 function skipped(name, message) {
   const li = document.createElement('li');
   li.className = 'card skipped';
@@ -91,7 +98,7 @@ async function handleFile(file) {
   } else {
     found.append(tag('No metadata found'));
   }
-  mid.append(n, found);
+  mid.append(statusBadge(result.summary.length ? 'Metadata removed' : 'Already clean'), n, found);
   li.append(img, mid, downloadLink('Download', outName, result.cleanedBytes, file.type));
   resultsEl.append(li);
 }
