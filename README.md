@@ -22,11 +22,7 @@ npm test      # parsing logic
 npm run lint
 ```
 
-## Deploy (Nginx VPS)
+## Deploy
 
-1. Edit `deploy/nginx.conf` — set `server_name` and `root`; install the server block, then `certbot --nginx -d <subdomain>`.
-2. Push the static files:
-
-```bash
-SSH_HOST=user@server REMOTE_ROOT=/var/www/untrace ./deploy/deploy.sh
-```
+It's a static site — upload `index.html`, `css/`, `js/`, `vendor/`, the icons,
+`robots.txt` and `sitemap.xml` to any static host and serve over HTTPS.
