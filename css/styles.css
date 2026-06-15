@@ -544,3 +544,12 @@ h1 {
   content: '✓';
   font-weight: 700;
 }
+
+.colophon a {
+  color: var(--accent-deep);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+}
+.colophon a:hover {
+  color: var(--accent);
+}
