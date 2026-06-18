@@ -4,20 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Untrace — Remove EXIF, GPS &amp; metadata from photos</title>
-    <link
-      rel="preload"
-      href="vendor/fonts/fraunces.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/styles.css" />
     <meta
       name="description"
       content="Free, private, in-browser tool to strip EXIF, GPS, XMP, IPTC and C2PA metadata from JPEG and PNG photos — without losing quality. Your images never leave your device."
     />
     <link rel="canonical" href="https://untrace.uxtim.com/" />
-    <meta name="theme-color" content="#246b5e" />
+    <meta name="theme-color" content="#1A6858" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Untrace" />
     <meta property="og:title" content="Untrace — Remove EXIF, GPS &amp; metadata from photos" />
@@ -40,78 +36,107 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   </head>
   <body>
-    <main>
-      <div class="brand">
-        <h1>Untrace</h1>
-        <p class="tagline">Share photos, not your metadata</p>
-      </div>
-      <p class="mode-desc">
-        Strip EXIF, GPS, XMP, IPTC, C2PA and hidden markers from JPEG and PNG — without altering
-        image quality.
-      </p>
-      <div id="drop" class="drop">
-        <p class="drop-hint">Drop your images here</p>
-        <p class="drop-or"><span>or</span></p>
-        <label class="btn"
-          >Choose files<input id="file" type="file" accept="image/jpeg,image/png" multiple hidden
-        /></label>
-      </div>
-      <div id="actions" class="actions" hidden>
-        <button id="download-all" class="btn btn-ghost">
-          Download all <span class="btn-tag">ZIP</span>
-        </button>
-      </div>
-      <ul id="results" class="results"></ul>
-      <section class="seo">
-        <h2>Why remove photo metadata?</h2>
-        <p class="seo-intro">
-          Every photo can carry hidden data — the exact GPS coordinates where it was taken, your
-          device model, timestamps and editing history. Share the file as-is and you hand all of
-          that to anyone who downloads it. Untrace removes it so the image you post reveals nothing
-          but the image.
-        </p>
-        <h2>How it works</h2>
-        <p>
-          Drop a JPEG or PNG and Untrace strips the metadata blocks while leaving the pixels
-          byte-for-byte identical, then lets you download the cleaned file (or a batch as a ZIP).
-          All processing happens locally on your device.
-        </p>
-        <h2>Frequently asked questions</h2>
-        <details>
-          <summary>What metadata does Untrace remove?</summary>
-          <p>
-            EXIF, GPS coordinates, camera and device info, timestamps, XMP, IPTC, C2PA and other
-            hidden markers.
+    <div class="app">
+      <header class="header">
+        <div class="wordmark">Untrace</div>
+        <span class="tagline">100% client-side · zero uploads</span>
+      </header>
+      <main>
+        <div class="hero">
+          <p class="hero-tagline">Share photos,<br />not your metadata.</p>
+          <p class="hero-desc">
+            Strip EXIF, GPS, XMP, IPTC and C2PA from JPEG and PNG — lossless, private, instant.
+            Nothing leaves your device.
           </p>
-        </details>
-        <details>
-          <summary>Does it reduce image quality?</summary>
+        </div>
+        <div class="drop-wrap">
+          <div id="drop" class="drop">
+            <svg
+              class="drop-icon"
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="6" y="8" width="28" height="24" rx="2" />
+              <circle cx="15" cy="17" r="3" />
+              <path d="M6 28l8-7 6 6 4-4 10 8" />
+            </svg>
+            <p class="drop-hint">Drop images here</p>
+            <p class="drop-sub">JPEG · PNG</p>
+            <label class="btn btn-dark"
+              >Choose files<input
+                id="file"
+                type="file"
+                accept="image/jpeg,image/png"
+                multiple
+                hidden
+            /></label>
+          </div>
+        </div>
+        <div id="actions" class="actions" hidden>
+          <button id="download-all" class="btn btn-ghost">
+            Download all <span class="btn-tag">ZIP</span>
+          </button>
+        </div>
+        <ul id="results" class="results"></ul>
+        <div class="sep"></div>
+        <section class="seo">
+          <h2>Why remove photo metadata?</h2>
           <p>
-            No. It removes only the metadata blocks; the pixels stay byte-for-byte identical, so the
-            image is unchanged.
+            Every photo can carry hidden data — the exact GPS coordinates where it was taken, your
+            device model, timestamps and editing history. Share the file as-is and you hand all of
+            that to anyone who downloads it. Untrace removes it so the image you post reveals nothing
+            but the image.
           </p>
-        </details>
-        <details>
-          <summary>Are my photos uploaded anywhere?</summary>
-          <p>No. Everything runs locally in your browser — no image ever leaves your device.</p>
-        </details>
-        <details>
-          <summary>Which formats are supported?</summary>
-          <p>JPEG and PNG.</p>
-        </details>
-        <details>
-          <summary>Why remove metadata before sharing a photo?</summary>
+          <h2>How it works</h2>
           <p>
-            Photos can reveal your GPS location, device model and the exact time a shot was taken;
-            stripping that protects your privacy.
+            Drop a JPEG or PNG and Untrace strips the metadata blocks while leaving the pixels
+            byte-for-byte identical, then lets you download the cleaned file (or a batch as a ZIP).
+            All processing happens locally on your device.
           </p>
-        </details>
-      </section>
-    </main>
-    <footer class="colophon">
-      100% client-side — no image, byte, or pixel ever leaves your machine.<br />
-      Ideas, bugs or suggestions? <a href="mailto:tim@uxtim.com">tim@uxtim.com</a>
-    </footer>
+          <h2>Frequently asked questions</h2>
+          <details>
+            <summary>What metadata does Untrace remove?</summary>
+            <p>
+              EXIF, GPS coordinates, camera and device info, timestamps, XMP, IPTC, C2PA and other
+              hidden markers.
+            </p>
+          </details>
+          <details>
+            <summary>Does it reduce image quality?</summary>
+            <p>
+              No. It removes only the metadata blocks; the pixels stay byte-for-byte identical, so
+              the image is unchanged.
+            </p>
+          </details>
+          <details>
+            <summary>Are my photos uploaded anywhere?</summary>
+            <p>No. Everything runs locally in your browser — no image ever leaves your device.</p>
+          </details>
+          <details>
+            <summary>Which formats are supported?</summary>
+            <p>JPEG and PNG.</p>
+          </details>
+          <details>
+            <summary>Why remove metadata before sharing a photo?</summary>
+            <p>
+              Photos can reveal your GPS location, device model and the exact time a shot was taken;
+              stripping that protects your privacy.
+            </p>
+          </details>
+        </section>
+      </main>
+      <footer class="footer">
+        <span>100% client-side — no image, byte, or pixel ever leaves your machine.</span>
+        <a href="mailto:tim@uxtim.com">tim@uxtim.com</a>
+      </footer>
+    </div>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -175,6 +200,80 @@
           }
         ]
       }
+    </script>
+    <script>
+      const ICONS = {
+        gps:  `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1.5C4.9 1.5 3.2 3.2 3.2 5.3c0 3.1 3.8 7.2 3.8 7.2s3.8-4.1 3.8-7.2c0-2.1-1.7-3.8-3.8-3.8z"/><circle cx="7" cy="5.3" r="1.2"/></svg>`,
+        exif: `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="4.5" width="11" height="7.5" rx="1.2"/><path d="M4.5 4.5v-.8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v.8"/><circle cx="7" cy="8.2" r="1.8"/></svg>`,
+        iptc: `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 .8h5.3L11 3.5V13H3V.8z"/><path d="M8.5.8v2.7H11"/><path d="M5 6h4M5 8h4M5 10h2.5"/></svg>`,
+        c2pa: `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1L1.5 3v4.2c0 2.8 2.3 4.9 5.5 5.8 3.2-1 5.5-3 5.5-5.8V3L7 1z"/></svg>`,
+        xmp:  `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 1.5h4.7l6.3 6.3-4.7 4.7-6.3-6.3V1.5z"/><circle cx="4.5" cy="4.5" r=".9" fill="currentColor" stroke="none"/></svg>`,
+      };
+
+      const CAT_MAP = {
+        'GPS LOCATION':      'gps',
+        'CAMERA':            'exif',
+        'DATE/TIME':         'exif',
+        'SOFTWARE':          'exif',
+        'EXIF DATA':         'exif',
+        'MODIFICATION DATE': 'exif',
+        'IPTC DATA':         'iptc',
+        'XMP TAGS':          'xmp',
+        'TEXT/XMP':          'xmp',
+        'C2PA MANIFEST':     'c2pa',
+      };
+      const CAT_ORDER = ['gps', 'exif', 'iptc', 'xmp', 'c2pa'];
+
+      function enrichCard(card) {
+        if (card.classList.contains('skipped')) return;
+        const found = card.querySelector('.found');
+        if (!found) return;
+        const chips = found.querySelectorAll('.tag');
+        if (!chips.length) return;
+        const count = chips.length;
+        const grouped = {};
+        for (const chip of chips) {
+          const text = chip.textContent.trim();
+          const colon = text.indexOf(':');
+          const rawCat = (colon > -1 ? text.slice(0, colon) : text).trim().toUpperCase();
+          const value  = colon > -1 ? text.slice(colon + 1).trim() : '';
+          const key = CAT_MAP[rawCat];
+          if (!key) continue;
+          if (!grouped[key]) grouped[key] = [];
+          if (value) grouped[key].push(value);
+        }
+        if (!Object.keys(grouped).length) return;
+        const layers = document.createElement('div');
+        layers.className = 'layers';
+        for (const key of CAT_ORDER) {
+          if (!grouped[key]) continue;
+          const layer = document.createElement('div');
+          layer.className = 'layer';
+          layer.dataset.type = key;
+          const icon = document.createElement('span');
+          icon.className = 'layer-icon';
+          icon.innerHTML = ICONS[key];
+          const label = document.createElement('span');
+          label.className = 'layer-label';
+          label.textContent = key.toUpperCase();
+          const vals = document.createElement('span');
+          vals.className = 'layer-values';
+          vals.textContent = grouped[key].join(' · ') || '—';
+          layer.append(icon, label, vals);
+          layers.append(layer);
+        }
+        found.replaceWith(layers);
+        const p = document.createElement('p');
+        p.className = 'field-count';
+        p.textContent = `${count} field${count !== 1 ? 's' : ''} stripped`;
+        card.querySelector('div').append(p);
+      }
+
+      new MutationObserver(mutations => {
+        for (const m of mutations)
+          for (const node of m.addedNodes)
+            if (node.nodeType === 1 && node.classList?.contains('card')) enrichCard(node);
+      }).observe(document.getElementById('results'), { childList: true });
     </script>
     <script src="vendor/jszip.min.js"></script>
     <script type="module" src="js/main.js"></script>
