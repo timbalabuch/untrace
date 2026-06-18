@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Untrace — v2 prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: 'DM Mono';
+      src: url('vendor/fonts/dm-mono-400.woff2') format('woff2');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'DM Mono';
+      src: url('vendor/fonts/dm-mono-500.woff2') format('woff2');
+      font-weight: 500;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    :root {
+      --bg:          #F1F0ED;
+      --white:       #FFFFFF;
+      --border:      rgba(0,0,0,0.07);
+      --border-md:   rgba(0,0,0,0.11);
+      --border-drk:  rgba(0,0,0,0.18);
+      --text:        #0D0C0A;
+      --text-2:      rgba(13,12,10,0.62);
+      --text-3:      rgba(13,12,10,0.38);
+      --accent:      #1A6858;
+      --accent-bg:   rgba(26,104,88,0.08);
+      --font:        'Syne', system-ui, sans-serif;
+      --mono:        'DM Mono', 'SF Mono', ui-monospace, monospace;
+    }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    /* Grain overlay — very subtle */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    ::selection { background: var(--accent); color: var(--white); }
+
+    /* ── Layout ─────────────────────────────────── */
+    .app {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+
+    /* ── Header ──────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 52px 0 40px;
+    }
+
+    .wordmark {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .wordmark sup {
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--text-2);
+      vertical-align: super;
+      margin-left: 4px;
+    }
+
+    .tagline {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--text-2);
+      white-space: nowrap;
+    }
+
+    /* ── Hero text ───────────────────────────────── */
+    .hero {
+      margin-bottom: 36px;
+    }
+
+    .hero-tagline {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .hero-desc {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    .drop-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+
+    /* ── Drop zone ───────────────────────────────── */
+    #drop {
+      background: var(--white);
+      border: 1.5px dashed var(--border-drk);
+      border-radius: 0;
+      padding: 60px 40px 52px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      animation: rise 0.55s 0.05s both;
+    }
+
+    #drop.over {
+      border-style: solid;
+      border-color: var(--accent);
+      background: rgba(26,104,88,0.03);
+      transform: translateY(-3px);
+    }
+
+    .drop-icon {
+      display: block;
+      margin: 0 auto 22px;
+      color: var(--text-3);
+      transition: color 0.2s;
+    }
+
+    #drop.over .drop-icon { color: var(--accent); }
+
+    .drop-hint {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text);
+    }
+
+    .drop-sub {
+      margin: 0 0 24px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--text-2);
+    }
+
+    /* ── Buttons ─────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: -0.01em;
+      padding: 9px 20px;
+      border-radius: 0;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:hover { opacity: 0.82; }
+    .btn:active { transform: scale(0.96); }
+
+    .btn-dark {
+      background: var(--text);
+      color: var(--white);
+    }
+
+    .btn-ghost {
+      background: var(--white);
+      color: var(--text);
+      border: 1.5px solid var(--border-md);
+    }
+
+    .btn-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid currentColor;
+      border-radius: 0;
+      padding: 1px 6px;
+      opacity: 0.55;
+    }
+
+    /* ── Actions bar ─────────────────────────────── */
+    .actions {
+      margin: 16px 0 0;
+      animation: rise 0.4s both;
+    }
+
+    /* ── Results ─────────────────────────────────── */
+    .results {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .card {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 16px;
+      background: var(--white);
+      border: 1px solid var(--border-md);
+      border-radius: 0;
+      animation: card-in 0.35s both;
+      position: relative;
+    }
+
+    .card img {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 0;
+      background: var(--bg);
+    }
+
+    /* mid div — column layout, name first */
+    .card > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-width: 0;
+    }
+
+    .name {
+      order: 0;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1.3;
+      margin: 0 0 5px;
+      word-break: break-all;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Status pill */
+    .status {
+      order: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-bg);
+      border-radius: 100px;
+      padding: 3px 9px 3px 7px;
+      align-self: flex-start;
+    }
+
+    .status::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* Metadata chips — used by skipped cards and "Already clean" case */
+    .found {
+      order: 2;
+      margin: 10px 0 0;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--text-2);
+      background: var(--bg);
+      border: 1px solid var(--border-md);
+      border-radius: 0;
+      padding: 2px 8px;
+    }
+
+    /* Layer rows (replace .found after enrichment) */
+    .layers {
+      order: 2;
+      margin: 10px 0 0;
+      border-top: 1px solid var(--border);
+      padding-top: 4px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .layer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .layer-icon {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      width: 13px;
+      height: 13px;
+    }
+
+    .layer-icon svg { width: 13px; height: 13px; }
+
+    .layer-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+      width: 36px;
+    }
+
+    .layer-values {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.02em;
+      color: var(--text-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .layer[data-type="gps"]  { color: #1A6858; }
+    .layer[data-type="exif"] { color: #1D4ED8; }
+    .layer[data-type="iptc"] { color: #B45309; }
+    .layer[data-type="c2pa"] { color: #6D28D9; }
+    .layer[data-type="xmp"]  { color: #0369A1; }
+    .layer:last-child { border-bottom: none; }
+
+    /* Field count line */
+    .field-count {
+      order: 3;
+      margin: 6px 0 0;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--text-2);
+    }
+
+    /* Skipped / unsupported */
+    .card.skipped {
+      opacity: 0.55;
+      border-style: dashed;
+    }
+
+    .card.skipped .name { font-weight: 500; }
+    .card.skipped .found { border-top: none; padding-top: 4px; margin-top: 4px; }
+
+    /* Download button in card — absolute top-right so layers span full width */
+    .card .btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 12px;
+      padding: 7px 14px;
+      white-space: nowrap;
+      background: var(--text);
+      color: var(--white);
+      border-radius: 0;
+      border: none;
+    }
+
+    .card .btn:hover { opacity: 0.8; }
+
+    /* Keep filename from sliding under the button */
+    .card .name { padding-right: 108px; }
+
+    /* ── Separator & SEO ─────────────────────────── */
+    .sep {
+      height: 1px;
+      background: var(--border);
+      margin: 56px 0 40px;
+    }
+
+    .seo h2 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin: 0 0 10px;
+    }
+
+    .seo p {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.75;
+      margin: 0 0 28px;
+    }
+
+    details {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    summary {
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 0;
+      color: var(--text);
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: '+ '; font-weight: 400; color: var(--text-3); }
+    details[open] summary::before { content: '− '; }
+
+    details p {
+      font-size: 13px;
+      color: var(--text-2);
+      margin: 8px 0 4px;
+      line-height: 1.65;
+    }
+
+    /* ── Footer ──────────────────────────────────── */
+    .footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--text-2);
+    }
+
+    .footer a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    .footer a:hover { color: var(--text); }
+
+    /* ── Animations ──────────────────────────────── */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ──────────────────────────────── */
+    @media (max-width: 480px) {
+      .header { padding: 36px 0 28px; flex-direction: column; align-items: flex-start; gap: 4px; }
+      #drop { padding: 44px 24px 40px; }
+      .tagline { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <header class="header">
+      <div class="wordmark">Untrace<sup>v2</sup></div>
+      <span class="tagline">Share photos · Not your metadata</span>
+    </header>
+
+    <main>
+
+      <div class="hero">
+        <p class="hero-tagline">Share photos, not your metadata</p>
+        <p class="hero-desc">Strip EXIF, GPS, XMP, IPTC, C2PA and hidden markers from JPEG and PNG — without altering image quality.</p>
+      </div>
+
+      <div class="drop-wrap">
+        <div id="drop" class="drop">
+
+          <!-- Upload icon -->
+          <svg class="drop-icon" width="28" height="28" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+            <path d="M12 12v9"/>
+            <path d="m8 17 4-5 4 5"/>
+          </svg>
+
+          <p class="drop-hint">Drop images here</p>
+          <p class="drop-sub">JPEG · PNG — pixels stay byte-for-byte identical</p>
+
+          <label class="btn btn-dark">
+            Choose files
+            <input id="file" type="file" accept="image/jpeg,image/png" multiple hidden />
+          </label>
+
+        </div>
+
+      </div>
+
+      <div id="actions" class="actions" hidden>
+        <button id="download-all" class="btn btn-ghost">
+          Download all <span class="btn-tag">ZIP</span>
+        </button>
+      </div>
+
+      <ul id="results" class="results"></ul>
+
+      <!-- SEO content -->
+      <div class="sep"></div>
+      <section class="seo">
+        <h2>Why remove photo metadata?</h2>
+        <p>Every photo carries hidden data — the exact GPS coordinates where it was taken, your
+        device model, timestamps and editing history. Share the file as-is and you hand all of
+        that to anyone who downloads it. Untrace removes it so the image you post reveals nothing
+        but the image.</p>
+
+        <h2>How it works</h2>
+        <p>Drop a JPEG or PNG and Untrace strips the metadata blocks while leaving the pixels
+        byte-for-byte identical, then lets you download the cleaned file or a batch as a ZIP.
+        All processing happens locally on your device.</p>
+
+        <h2>Frequently asked questions</h2>
+        <details>
+          <summary>What metadata does Untrace remove?</summary>
+          <p>EXIF, GPS coordinates, camera and device info, timestamps, XMP, IPTC, C2PA and other
+          hidden markers.</p>
+        </details>
+        <details>
+          <summary>Does it reduce image quality?</summary>
+          <p>No. It removes only the metadata blocks; the pixels stay byte-for-byte identical, so
+          the image is unchanged.</p>
+        </details>
+        <details>
+          <summary>Are my photos uploaded anywhere?</summary>
+          <p>No. Everything runs locally in your browser — no image ever leaves your device.</p>
+        </details>
+        <details>
+          <summary>Which formats are supported?</summary>
+          <p>JPEG and PNG.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>100% client-side — no image, byte, or pixel leaves your device</span>
+      <a href="mailto:tim@uxtim.com">tim@uxtim.com</a>
+    </footer>
+
+  </div>
+
+  <script src="vendor/jszip.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+
+  <script>
+    const ICONS = {
+      gps:  `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1.5C4.9 1.5 3.2 3.2 3.2 5.3c0 3.1 3.8 7.2 3.8 7.2s3.8-4.1 3.8-7.2c0-2.1-1.7-3.8-3.8-3.8z"/><circle cx="7" cy="5.3" r="1.2"/></svg>`,
+      exif: `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="4.5" width="11" height="7.5" rx="1.2"/><path d="M4.5 4.5v-.8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v.8"/><circle cx="7" cy="8.2" r="1.8"/></svg>`,
+      iptc: `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 .8h5.3L11 3.5V13H3V.8z"/><path d="M8.5.8v2.7H11"/><path d="M5 6h4M5 8h4M5 10h2.5"/></svg>`,
+      c2pa: `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1L1.5 3v4.2c0 2.8 2.3 4.9 5.5 5.8 3.2-1 5.5-3 5.5-5.8V3L7 1z"/></svg>`,
+      xmp:  `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 1.5h4.7l6.3 6.3-4.7 4.7-6.3-6.3V1.5z"/><circle cx="4.5" cy="4.5" r=".9" fill="currentColor" stroke="none"/></svg>`,
+    };
+
+    const CAT_MAP = {
+      'GPS LOCATION': 'gps',
+      'CAMERA':       'exif',
+      'DATE/TIME':    'exif',
+      'SOFTWARE':     'exif',
+      'EXIF DATA':    'exif',
+      'MODIFICATION DATE': 'exif',
+      'IPTC DATA':    'iptc',
+      'XMP TAGS':     'xmp',
+      'TEXT/XMP':     'xmp',
+      'C2PA MANIFEST':'c2pa',
+    };
+    const CAT_ORDER = ['gps', 'exif', 'iptc', 'xmp', 'c2pa'];
+
+    function enrichCard(card) {
+      if (card.classList.contains('skipped')) return;
+
+      const found = card.querySelector('.found');
+      if (!found) return;
+
+      const chips = found.querySelectorAll('.tag');
+      if (!chips.length) return;
+
+      const count = chips.length;
+
+      // Group values by category
+      const grouped = {};
+      for (const chip of chips) {
+        const text = chip.textContent.trim();
+        const colon = text.indexOf(':');
+        const rawCat = (colon > -1 ? text.slice(0, colon) : text).trim().toUpperCase();
+        const value  = colon > -1 ? text.slice(colon + 1).trim() : '';
+        const key = CAT_MAP[rawCat];
+        if (!key) continue;
+        if (!grouped[key]) grouped[key] = [];
+        if (value) grouped[key].push(value);
+      }
+
+      // No known categories — leave .found as-is (e.g. "Already clean")
+      if (!Object.keys(grouped).length) return;
+
+      // Build layer rows
+      const layers = document.createElement('div');
+      layers.className = 'layers';
+
+      for (const key of CAT_ORDER) {
+        if (!grouped[key]) continue;
+
+        const layer = document.createElement('div');
+        layer.className = 'layer';
+        layer.dataset.type = key;
+
+        const icon = document.createElement('span');
+        icon.className = 'layer-icon';
+        icon.innerHTML = ICONS[key];
+
+        const label = document.createElement('span');
+        label.className = 'layer-label';
+        label.textContent = key.toUpperCase();
+
+        const vals = document.createElement('span');
+        vals.className = 'layer-values';
+        vals.textContent = grouped[key].join(' · ') || '—';
+
+        layer.append(icon, label, vals);
+        layers.append(layer);
+      }
+
+      found.replaceWith(layers);
+
+      // Field count summary
+      const p = document.createElement('p');
+      p.className = 'field-count';
+      p.textContent = `${count} field${count !== 1 ? 's' : ''} stripped`;
+      card.querySelector('div').append(p);
+    }
+
+    new MutationObserver(mutations => {
+      for (const m of mutations)
+        for (const node of m.addedNodes)
+          if (node.nodeType === 1 && node.classList?.contains('card')) enrichCard(node);
+    }).observe(document.getElementById('results'), { childList: true });
+  </script>
+</body>
+</html>

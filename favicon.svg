@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect x="2" y="2" width="60" height="60" rx="14" fill="#246b5e" />
-  <text x="32" y="45" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="700" fill="#efe6d0" text-anchor="middle">U</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="3" fill="#F1F0ED"/>
+  <path fill="#0D0C0A" d="M6 3L6 19C6 26 10.5 30 16 30C21.5 30 26 26 26 19L26 3L21 3L21 19C21 22 19.2 24 16 24C12.8 24 11 22 11 19L11 3Z"/>
 </svg>
