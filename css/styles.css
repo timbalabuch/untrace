@@ -26,6 +26,7 @@
   --accent:      #1A6858;
   --accent-bg:   rgba(26,104,88,0.08);
   --font:        'Syne', system-ui, sans-serif;
+  --body:        -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --mono:        'DM Mono', 'SF Mono', ui-monospace, monospace;
 }
 
@@ -34,7 +35,7 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: var(--font);
+  font-family: var(--body);
   font-size: 15px;
   line-height: 1.65;
   color: var(--text);
@@ -70,6 +71,7 @@ body::before {
 }
 
 .wordmark {
+  font-family: var(--font);
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -89,6 +91,7 @@ body::before {
 .hero { margin-bottom: 36px; }
 
 .hero-tagline {
+  font-family: var(--font);
   margin: 0 0 8px;
   font-size: 22px;
   font-weight: 700;
@@ -139,6 +142,7 @@ body::before {
 #drop.over .drop-icon { color: var(--accent); }
 
 .drop-hint {
+  font-family: var(--font);
   margin: 0 0 6px;
   font-size: 18px;
   font-weight: 700;
@@ -403,6 +407,7 @@ body::before {
 }
 
 .seo h2 {
+  font-family: var(--font);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
